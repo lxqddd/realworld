@@ -67,51 +67,28 @@ import {
 import Pagination from '../../components/Pagination'
 import ArticleItem from '../../components/ArticleItem/ArticleItem.vue'
 
-const getTagList = async () => {
-  try {
-    const { tags } = await getTags()
-    return tags
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-const getGlobalFeedArticleList = async (offset = 0, limit = 10) => {
-  try {
-    const { articles, articlesCount } = await getGlobalFeedArticle({
-      limit,
-      offset
-    })
-    return {
-      articles,
-      articlesCount
-    }
-  } catch (error) {
-    console.error(error)
-  }
-}
-
 export default {
   name: 'HomeIndex',
   components: {
     Pagination,
     ArticleItem
   },
-  async asyncData() {
-    // 获取文章标签列表
-    const tags = await getTagList()
+  // async asyncData() {
+  //   // 获取文章标签列表
+  //   const tags = await getTagList()
 
-    // 获取文章列表
-    const { articles, articlesCount } = await getGlobalFeedArticleList(0, 10)
-    return {
-      tags,
-      articlesCount,
-      articles
-    }
-  },
+  //   // 获取文章列表
+  //   const { articles, articlesCount } = await getGlobalFeedArticleList(0, 10)
+  //   return {
+  //     tags,
+  //     articlesCount,
+  //     articles
+  //   }
+  // },
 
   data() {
     return {
+      tags: [],
       tabMap: {
         your: 'Your Feed',
         global: 'Global Feed',
@@ -121,12 +98,15 @@ export default {
       curPage: 1,
       pageSize: 10,
       totalPages: 0,
-      favoriteLock: true
+      favoriteLock: true,
+      articlesCount: 0,
+      articles: []
     }
   },
 
   created() {
-    this.totalPages = Math.ceil(this.articlesCount / this.pageSize)
+    this.getTagList()
+    this.getGlobalFeedArticleList()
   },
 
   computed: {
@@ -136,6 +116,15 @@ export default {
   },
 
   methods: {
+    async getTagList() {
+      try {
+        const { tags } = await getTags()
+        this.tags = [...tags]
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
     async changeTab(tab) {
       if (!this.isLogin) {
         return this.$router.push('/login')
@@ -193,10 +182,18 @@ export default {
       }
     },
 
-    async getGlobalFeedArticleList(curPage, pageSize) {
-      const { articles, articlesCount } = await getGlobalFeedArticleList(curPage, pageSize)
-      this.articles = articles
-      this.totalPages = Math.ceil(articlesCount / this.pageSize)
+    async getGlobalFeedArticleList(offset = 0, limit = 10) {
+      try {
+        const { articles, articlesCount } = await getGlobalFeedArticle({
+          limit,
+          offset
+        })
+        this.articles = articles
+        this.articlesCount = articlesCount
+        this.totalPages = Math.ceil(articlesCount / this.pageSize)
+      } catch (error) {
+        console.error(error)
+      }
     },
 
     async initArticlesOfTab(tab, curPage = 0, pageSize = 10) {
