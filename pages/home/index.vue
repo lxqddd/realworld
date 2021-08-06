@@ -73,18 +73,6 @@ export default {
     Pagination,
     ArticleItem
   },
-  // async asyncData() {
-  //   // 获取文章标签列表
-  //   const tags = await getTagList()
-
-  //   // 获取文章列表
-  //   const { articles, articlesCount } = await getGlobalFeedArticleList(0, 10)
-  //   return {
-  //     tags,
-  //     articlesCount,
-  //     articles
-  //   }
-  // },
 
   data() {
     return {
@@ -145,7 +133,6 @@ export default {
 
     async setPage(page) {
       this.curPage = page
-      console.log(this.curSelectTab)
       await this.initArticlesOfTab(this.curSelectTab, this.curPage - 1)
     },
 

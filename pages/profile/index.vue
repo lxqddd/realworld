@@ -48,21 +48,6 @@
 
           <div class="article-preview" v-for="article in articles" :key="article.slug">
             <ArticleItem :article="article" />
-            <!-- <div class="article-meta">
-              <nuxt-link to="/profile"> <img :src="article.author.image"/></nuxt-link>
-              <div class="info">
-                <a href="" class="author">{{ article.author.username }}</a>
-                <span class="date">{{ }}</span>
-              </div>
-              <button class="btn btn-outline-primary btn-sm pull-xs-right">
-                <i class="ion-heart"></i> 29
-              </button>
-            </div>
-            <a href="" class="preview-link">
-              <h1>How to build webapps that scale</h1>
-              <p>This is the description for the post.</p>
-              <span>Read more...</span>
-            </a> -->
           </div>
         </div>
         <Pagination
@@ -112,10 +97,8 @@ export default {
   },
   async created() {
     await this.getProfileUserInfo()
-    console.log(this.profileUserInfo)
     await this.initArticlesOfTab('My Articles', this.profileUserInfo.username)
     this.totalPages = Math.ceil(this.articlesCount / this.pageSize)
-    console.log(this.totalPages)
   },
 
   methods: {
@@ -124,7 +107,7 @@ export default {
         const { profile } = await getProfileUserInfo(this.$route.query.username)
         this.profileUserInfo = profile
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     },
 
@@ -197,7 +180,6 @@ export default {
 
     async setPage(page) {
       this.curPage = page
-      console.log(this.curSelectTab)
       await this.initArticlesOfTab(this.curSelectTab, this.curPage - 1)
     },
 
