@@ -46,14 +46,13 @@
             </ul>
           </div>
 
-          <div class="article-preview">
-            <div class="article-meta">
-              <nuxt-link to="/profile">
-                <img src="https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png"
-              /></nuxt-link>
+          <div class="article-preview" v-for="article in articles" :key="article.slug">
+            <ArticleItem :article="article" />
+            <!-- <div class="article-meta">
+              <nuxt-link to="/profile"> <img :src="article.author.image"/></nuxt-link>
               <div class="info">
-                <a href="" class="author">Eric Simons</a>
-                <span class="date">January 20th</span>
+                <a href="" class="author">{{ article.author.username }}</a>
+                <span class="date">{{ }}</span>
               </div>
               <button class="btn btn-outline-primary btn-sm pull-xs-right">
                 <i class="ion-heart"></i> 29
@@ -63,7 +62,7 @@
               <h1>How to build webapps that scale</h1>
               <p>This is the description for the post.</p>
               <span>Read more...</span>
-            </a>
+            </a> -->
           </div>
         </div>
         <Pagination
@@ -87,11 +86,13 @@ import {
   getMyFavoArticles
 } from '../../apis/profile'
 import Pagination from '../../components/Pagination'
+import ArticleItem from '../../components/ArticleItem'
 export default {
   name: 'UserProfile',
   middleware: 'authenticated',
   components: {
-    Pagination
+    Pagination,
+    ArticleItem
   },
   data() {
     return {
@@ -113,7 +114,7 @@ export default {
     await this.getProfileUserInfo()
     console.log(this.profileUserInfo)
     await this.initArticlesOfTab('My Articles', this.profileUserInfo.username)
-    this.totalPages = Math.ceil(this.articles / this.pageSize)
+    this.totalPages = Math.ceil(this.articlesCount / this.pageSize)
     console.log(this.totalPages)
   },
 
@@ -151,7 +152,7 @@ export default {
 
     async changeTab(tab) {
       this.curSelectTab = tab
-      await this.initArticlesOfTab(tab, this.profileUserInfo.username)
+      await this.initArticlesOfTab(tab, this.profileUserInfo.username, 0, 10)
     },
 
     async initArticlesOfTab(tab, authorName, curPage = 0, pageSize = 10) {
@@ -163,12 +164,16 @@ export default {
           await this.getFavoArticle(authorName, curPage, pageSize)
           break
       }
-      this.totalPages = Math.ceil(this.articles / this.pageSize)
+      this.totalPages = Math.ceil(this.articlesCount / this.pageSize)
     },
 
     async getMyArticles(authorName, curPage, pageSize) {
       try {
-        const { articles, articlesCount } = await getMyArticles({ authorName, curPage, pageSize })
+        const { articles, articlesCount } = await getMyArticles({
+          authorName,
+          offset: curPage,
+          pageSize
+        })
         this.articles = articles
         this.articlesCount = articlesCount
       } catch (error) {
@@ -180,7 +185,7 @@ export default {
       try {
         const { articles, articlesCount } = await getMyFavoArticles({
           username: authorName,
-          curPage,
+          offset: curPage,
           pageSize
         })
         this.articles = articles

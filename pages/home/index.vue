@@ -65,7 +65,7 @@ import {
   getTagArticle
 } from '../../apis/article'
 import Pagination from '../../components/Pagination'
-import ArticleItem from '../../components/ArticleItem/ArticleItem.vue'
+import ArticleItem from '../../components/ArticleItem'
 
 export default {
   name: 'HomeIndex',
@@ -98,7 +98,7 @@ export default {
       curPage: 1,
       pageSize: 10,
       totalPages: 0,
-      favoriteLock: true,
+
       articlesCount: 0,
       articles: []
     }

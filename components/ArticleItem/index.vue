@@ -36,6 +36,11 @@ export default {
       default: () => ({})
     }
   },
+  data() {
+    return {
+      favoriteLock: true
+    }
+  },
   methods: {
     jumpToProfile(username) {
       this.$router.push({
