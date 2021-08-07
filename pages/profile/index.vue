@@ -12,6 +12,7 @@
             <button
               class="btn btn-sm btn-outline-secondary action-btn"
               @click="handleOrCancelFollow(profileUserInfo)"
+              :disabled="profileUserInfo.disabledFollow"
             >
               <i class="ion-plus-round"></i>
               &nbsp;
@@ -36,13 +37,6 @@
                   item
                 }}</span>
               </li>
-
-              <!-- <li class="nav-item">
-                <a class="nav-link active" href="">My Articles</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="">Favorited Articles</a>
-              </li> -->
             </ul>
           </div>
 
@@ -82,7 +76,6 @@ export default {
   data() {
     return {
       profileUserInfo: {},
-      followLock: true,
       tabMap: {
         my: 'My Articles',
         favo: 'Favorited Articles'
@@ -99,6 +92,7 @@ export default {
     await this.getProfileUserInfo()
     await this.initArticlesOfTab('My Articles', this.profileUserInfo.username)
     this.totalPages = Math.ceil(this.articlesCount / this.pageSize)
+    this.$set(this.profileUserInfo, 'disabledFollow', false)
   },
 
   methods: {
@@ -112,10 +106,10 @@ export default {
     },
 
     async handleOrCancelFollow(userInfo) {
-      if (!this.followLock) {
-        this.followLock = false
+      if (this.profileUserInfo.disabledFollow) {
         return
       }
+      this.profileUserInfo.disabledFollow = true
       const { following, username } = userInfo
       try {
         if (following) {
@@ -130,7 +124,7 @@ export default {
       } catch (error) {
         console.error(error)
       }
-      this.followLock = true
+      this.profileUserInfo.disabledFollow = false
     },
 
     async changeTab(tab) {
