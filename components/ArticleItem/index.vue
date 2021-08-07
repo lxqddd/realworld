@@ -13,6 +13,7 @@
       <button
         class="btn btn-sm btn-outline-primary pull-xs-right"
         :class="article.favorited ? 'active' : ''"
+        :disabled="article.disabled"
         @click="handleOrCancelFavorite(article)"
       >
         <i class="ion-heart"></i> {{ article.favoritesCount }}
@@ -36,10 +37,8 @@ export default {
       default: () => ({})
     }
   },
-  data() {
-    return {
-      favoriteLock: true
-    }
+  created() {
+    this.$set(this.article, 'disabled', false)
   },
   methods: {
     jumpToProfile(username) {
@@ -52,10 +51,10 @@ export default {
     },
     async handleOrCancelFavorite(article) {
       // 防止连续点击多次
-      if (!this.favoriteLock) {
-        this.favoriteLock = false
+      if (this.article.disabled) {
         return
       }
+      this.article.disabled = true
       if (article.favorited) {
         this.cancelFavoriteArticle(article.slug)
         article.favorited = false
@@ -65,7 +64,7 @@ export default {
         article.favorited = true
         article.favoritesCount += 1
       }
-      this.favoriteLock = true
+      this.article.disabled = false
     },
 
     async favoriteArticle(articleSlug) {
@@ -83,9 +82,14 @@ export default {
         console.error(error)
       }
     },
-    // TODO 预览文章
+
     handlePreviewArticle(article) {
-      console.log(article)
+      this.$router.push({
+        path: '/article',
+        query: {
+          slug: article.slug
+        }
+      })
     }
   }
 }

@@ -74,3 +74,39 @@ export const favoriteArticle = articleSlug => {
 export const cancelFavoriteArticle = articleSlug => {
   return fetch.delete(`/api/articles/${articleSlug}/favorite`)
 }
+
+/**
+ * 获取文章详情
+ * @param { String } articleSlug 文章的slug
+ * @returns
+ */
+export const getArticleDetail = articleSlug => {
+  return fetch.get(`/api/articles/${articleSlug}`)
+}
+
+/**
+ * 获取文章的评论列表
+ * @param { String } articleSlug 文章的slug
+ * @returns
+ */
+export const getCommentList = articleSlug => {
+  return fetch.get(`/api/articles/${articleSlug}/comments`)
+}
+
+/**
+ * 关注当前文章的作者
+ * @param { String } authorName 当前文章的作者名称
+ * @returns
+ */
+export const followAuthor = authorName => {
+  return fetch.post(`api/profiles/${authorName}/follow`)
+}
+
+/**
+ * 取消关注当前文章的作者
+ * @param { String } authorName 当前文章的作者名称
+ * @returns
+ */
+export const CancelFollowAuthor = authorName => {
+  return fetch.delete(`api/profiles/${authorName}/follow`)
+}

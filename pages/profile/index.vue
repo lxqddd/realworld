@@ -180,13 +180,19 @@ export default {
 
     async setPage(page) {
       this.curPage = page
-      await this.initArticlesOfTab(this.curSelectTab, this.curPage - 1)
+      console.log(this.curPage)
+      await this.initArticlesOfTab(this.curSelectTab, this.profileUserInfo.username, this.curPage)
     },
 
     async setOffset(offset) {
       this.pageSize = offset
       this.curPage = 1
-      await this.initArticlesOfTab(this.curSelectTab, this.curPage - 1, this.pageSize)
+      await this.initArticlesOfTab(
+        this.curSelectTab,
+        this.profileUserInfo.username,
+        this.curPage - 1,
+        this.pageSize
+      )
     }
   }
 }

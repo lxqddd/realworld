@@ -40,8 +40,13 @@ module.exports = {
           },
           {
             name: 'article',
-            path: '/article/:articleId',
+            path: '/article',
             component: resolve(__dirname, 'pages/article')
+          },
+          {
+            name: 'article-edit',
+            path: '/article-edit',
+            component: resolve(__dirname, 'pages/article/edit.vue')
           }
         ]
       })
