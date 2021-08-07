@@ -15,11 +15,12 @@
 
           <button class="btn btn-sm btn-outline-secondary" @click="followOrCancelFollowCurAuthor">
             <i class="ion-plus-round"></i>
-            &nbsp; {{ articleDetail.favorited ? 'UnFollow' : 'Follow' }}
+            &nbsp;
+            {{ articleDetail.author && articleDetail.author.following ? 'UnFollow' : 'Follow' }}
             {{ articleDetail.author ? articleDetail.author.username : '' }}
           </button>
           &nbsp;&nbsp;
-          <button class="btn btn-sm btn-outline-primary">
+          <button class="btn btn-sm btn-outline-primary" @click="favoOrCancelFavoCurArticle">
             <i class="ion-heart"></i>
             &nbsp; Favorite Post <span class="counter">({{ articleDetail.favoritesCount }})</span>
           </button>
@@ -56,13 +57,14 @@
               <span class="date">{{ articleDetail.updateAt | date('MMM DD, YYYY') }}</span>
             </div>
           </div>
-          <button class="btn btn-sm btn-outline-secondary">
+          <button class="btn btn-sm btn-outline-secondary" @click="followOrCancelFollowCurAuthor">
             <i class="ion-plus-round"></i>
-            &nbsp; {{ articleDetail.favorited ? 'UnFollow' : 'Follow' }}
+            &nbsp;
+            {{ articleDetail.author && articleDetail.author.following ? 'UnFollow' : 'Follow' }}
             {{ articleDetail.author ? articleDetail.author.username : '' }}
           </button>
           &nbsp;
-          <button class="btn btn-sm btn-outline-primary">
+          <button class="btn btn-sm btn-outline-primary" @click="favoOrCancelFavoCurArticle">
             <i class="ion-heart"></i>
             &nbsp; Favorite Post <span class="counter">({{ articleDetail.favoritesCount }})</span>
           </button>
@@ -111,10 +113,9 @@ import {
   getArticleDetail,
   getCommentList,
   favoriteArticle,
-  cancelFavoriteArticle,
-  followAuthor,
-  CancelFollowAuthor
+  cancelFavoriteArticle
 } from '../../apis/article'
+import { followProfile, cancelFollowProfile } from '../../apis/profile'
 import { mapState } from 'vuex'
 export default {
   name: 'Article',
@@ -122,14 +123,15 @@ export default {
     return {
       slug: '',
       articleDetail: {},
-      commentList: {},
-      followLock: true
+      commentList: {}
     }
   },
   async created() {
     this.slug = this.$route.query.slug
     await this.getArticleDetail()
     await this.getArticleCommentList()
+    this.$set(this.articleDetail, 'disabledFollow', false)
+    this.$set(this.articleDetail, 'disabledFavo', false)
   },
   computed: {
     ...mapState(['user'])
@@ -165,23 +167,43 @@ export default {
     },
 
     async followOrCancelFollowCurAuthor() {
-      if (!this.followLock) {
-        console.log('hello world')
-        this.followLock = false
+      if (this.articleDetail.disabledFollow) {
         return
       }
+      this.articleDetail.disabledFollow = true
       try {
-        if (this.articleDetail.favorited) {
-          await CancelFollowAuthor(this.articleDetail.author.username)
-          this.articleDetail.favorited = false
+        if (this.articleDetail.author.following) {
+          await cancelFollowProfile(this.articleDetail.author.username)
+          this.articleDetail.author.following = false
         } else {
-          await followAuthor(this.articleDetail.author.username)
-          this.articleDetail.favorited = true
+          await followProfile(this.articleDetail.author.username)
+          this.articleDetail.author.following = true
         }
       } catch (error) {
         console.error(error)
       }
-      this.followLock = true
+      this.articleDetail.disabledFollow = false
+    },
+
+    async favoOrCancelFavoCurArticle() {
+      if (this.articleDetail.disabledFavo) {
+        return
+      }
+      this.articleDetail.disabledFavo = true
+      try {
+        if (this.articleDetail.favorited) {
+          await cancelFavoriteArticle(this.articleDetail.slug)
+          this.articleDetail.favorited = false
+          this.articleDetail.favoritesCount -= 1
+        } else {
+          await favoriteArticle(this.articleDetail.slug)
+          this.articleDetail.favorited = true
+          this.articleDetail.favoritesCount += 1
+        }
+      } catch (error) {
+        console.error(error)
+      }
+      this.articleDetail.disabledFavo = false
     }
   }
 }

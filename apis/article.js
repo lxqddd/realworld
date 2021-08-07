@@ -92,21 +92,3 @@ export const getArticleDetail = articleSlug => {
 export const getCommentList = articleSlug => {
   return fetch.get(`/api/articles/${articleSlug}/comments`)
 }
-
-/**
- * 关注当前文章的作者
- * @param { String } authorName 当前文章的作者名称
- * @returns
- */
-export const followAuthor = authorName => {
-  return fetch.post(`api/profiles/${authorName}/follow`)
-}
-
-/**
- * 取消关注当前文章的作者
- * @param { String } authorName 当前文章的作者名称
- * @returns
- */
-export const CancelFollowAuthor = authorName => {
-  return fetch.delete(`api/profiles/${authorName}/follow`)
-}

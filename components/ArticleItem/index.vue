@@ -1,15 +1,16 @@
 <template>
   <div>
     <div class="article-meta">
-      <span @click="jumpToProfile(article.author.username)">
-        <img :src="article.author.image" />
-      </span>
-      <div class="info">
-        <span class="author" @click="jumpToProfile(article.author.username)">{{
-          article.author.username
-        }}</span>
-        <span class="date">{{ article.createdAt | date('MMM DD,YYYY') }}</span>
+      <div @click="jumpToProfile(article.author.username)" style="display: inline-block;">
+        <span>
+          <img :src="article.author.image" />
+        </span>
+        <div class="info">
+          <span class="author">{{ article.author.username }}</span>
+          <span class="date">{{ article.createdAt | date('MMM DD,YYYY') }}</span>
+        </div>
       </div>
+
       <button
         class="btn btn-sm btn-outline-primary pull-xs-right"
         :class="article.favorited ? 'active' : ''"
