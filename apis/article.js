@@ -92,3 +92,5 @@ export const getArticleDetail = articleSlug => {
 export const getCommentList = articleSlug => {
   return fetch.get(`/api/articles/${articleSlug}/comments`)
 }
+
+export const postComment = articleSlug => {}

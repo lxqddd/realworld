@@ -1,0 +1,58 @@
+[
+  {
+    "name": "home",
+    "path": "/",
+    "component": "C:\\\\Users\\\\xiang\\\\Desktop\\\\realworld\\\\pages\\\\layout",
+    "children": [
+      {
+        "name": "home",
+        "path": "",
+        "component": "C:\\\\Users\\\\xiang\\\\Desktop\\\\realworld\\\\pageS\\\\home",
+        "_name": "_666aa89d"
+      },
+      {
+        "name": "login",
+        "path": "/login",
+        "component": "C:\\\\Users\\\\xiang\\\\Desktop\\\\realworld\\\\pages\\\\login",
+        "_name": "_63484f4b"
+      },
+      {
+        "name": "register",
+        "path": "/register",
+        "component": "C:\\\\Users\\\\xiang\\\\Desktop\\\\realworld\\\\pages\\\\login",
+        "_name": "_63484f4b"
+      },
+      {
+        "name": "profile",
+        "path": "/profile",
+        "component": "C:\\\\Users\\\\xiang\\\\Desktop\\\\realworld\\\\pages\\\\profile",
+        "_name": "_e8cf0dea"
+      },
+      {
+        "name": "settings",
+        "path": "/settings",
+        "component": "C:\\\\Users\\\\xiang\\\\Desktop\\\\realworld\\\\pages\\\\settings",
+        "_name": "_78b6b901"
+      },
+      {
+        "name": "edit",
+        "path": "/edit",
+        "component": "C:\\\\Users\\\\xiang\\\\Desktop\\\\realworld\\\\pages\\\\edit",
+        "_name": "_033089e8"
+      },
+      {
+        "name": "article",
+        "path": "/article",
+        "component": "C:\\\\Users\\\\xiang\\\\Desktop\\\\realworld\\\\pages\\\\article",
+        "_name": "_7262bc58"
+      },
+      {
+        "name": "article-edit",
+        "path": "/article-edit",
+        "component": "C:\\\\Users\\\\xiang\\\\Desktop\\\\realworld\\\\pages\\\\article\\\\edit.vue",
+        "_name": "_17a4750c"
+      }
+    ],
+    "_name": "_05049788"
+  }
+]
