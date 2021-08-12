@@ -83,7 +83,7 @@ export default {
       curSelectTab: 'My Articles',
       articles: [],
       articlesCount: 0,
-      curPage: 0,
+      curPage: 1,
       pageSize: 10,
       totalPages: 0
     }
