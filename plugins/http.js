@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const fetch = axios.create({
-  baseURL: 'https://conduit.productionready.io'
+  baseURL: 'http://realworld.api.fed.lagounews.com'
 })
 
 fetch.interceptors.response.use(

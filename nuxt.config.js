@@ -52,9 +52,9 @@ module.exports = {
       })
     }
   },
-  server: {
-    host: '0.0.0.0',
-    port: 1998
-  },
+  // server: {
+  //   host: '0.0.0.0',
+  //   port: 1998
+  // },
   plugins: ['~/plugins/http.js', '~/plugins/dayjs.js']
 }
