@@ -24,7 +24,7 @@
               <i class="ion-gear-a"></i>&nbsp;Settings
             </nuxt-link>
           </li>
-          <li class="nav-item" v-if="user.id">
+          <li class="nav-item" v-if="user.username">
             <nuxt-link class="nav-link active" to="/profile">
               <img class="user-pic" :src="user.image" />
               {{ user.username }}
