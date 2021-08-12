@@ -82,31 +82,16 @@ export default {
         email: this.userForm.email,
         password: this.userForm.password
       }
-      if (this.userForm.username) {
-        await this.handleRegister(params)
-      } else {
-        await this.handleLogin(params)
-      }
-    },
-
-    async handleLogin(params) {
-      delete params.username
+      let user = null
       try {
-        const { user } = await login(params)
-        this.$store.commit('setUser', user)
-        Cookie.set('auth', user)
-        this.$router.push('/')
-      } catch (error) {
-        console.error(error)
-        this.errors = []
-        const errors = error['errors']
-        this.handleErrors(errors)
-      }
-    },
-
-    async handleRegister(params) {
-      try {
-        const { user } = await register(params)
+        if (this.userForm.username) {
+          const res = await register(params)
+          user = res.user
+        } else {
+          delete params.username
+          const res = await login(params)
+          user = res.user
+        }
         Cookie.set('auth', user)
         this.$store.commit('setUser', user)
         this.$router.push('/')

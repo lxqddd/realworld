@@ -30,6 +30,7 @@
 
 <script>
 import { favoriteArticle, cancelFavoriteArticle } from '../../apis/article'
+import { mapState } from 'vuex'
 export default {
   name: 'ArticleItem',
   props: {
@@ -41,6 +42,9 @@ export default {
   created() {
     this.$set(this.article, 'disabled', false)
   },
+  computed: {
+    ...mapState(['user'])
+  },
   methods: {
     jumpToProfile(username) {
       this.$router.push({
@@ -51,6 +55,11 @@ export default {
       })
     },
     async handleOrCancelFavorite(article) {
+      if (!this.user.token) {
+        this.$router.push({
+          path: '/login'
+        })
+      }
       // 防止连续点击多次
       if (this.article.disabled) {
         return
