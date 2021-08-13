@@ -79,7 +79,7 @@
             </div>
             <div class="card-footer">
               <img :src="user.image" class="comment-author-img" />
-              <button class="btn btn-sm btn-primary">
+              <button class="btn btn-sm btn-primary" @click.prevent="postComment">
                 Post Comment
               </button>
             </div>
@@ -204,6 +204,10 @@ export default {
         console.error(error)
       }
       this.articleDetail.disabledFavo = false
+    },
+
+    postComment() {
+      // 发布评论
     }
   }
 }
