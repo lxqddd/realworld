@@ -10,24 +10,45 @@ export const getTags = () => {
 
 /**
  * 发布一篇新的文章
- * @typedef { Article } article
+ * @typedef { Object } Article
  * @property { String } body 内容
  * @property { String } title 标题
  * @property { String } description 描述内容
  * @property { Array } tagList 标签列表
+ *
+ * @param { Article } article
  * @returns
  */
 export const newArticle = article => {
-  return fetch.post('api/articles', {
-    article
-  })
+  return fetch.post('api/articles', { article })
+}
+
+/**
+ * 更新文章
+ * @param { String } slug 文章id
+ * @param { Article } article
+ * @returns
+ */
+export const updateArticle = (slug, article) => {
+  return fetch.put(`/api/articles/${slug}`, { article })
+}
+
+/**
+ * 删除文章
+ * @param { String } slug 文章id
+ * @returns
+ */
+export const deleteArticle = slug => {
+  return fetch.delete(`/api/articles/${slug}`)
 }
 
 /**
  * 获取所有的文章列表
- * @typedef { ArticleList } params
+ * @typedef { ArticleList } ArticleList
  * @property { Number } limit 步长
  * @property { Number } offset 每页多少条
+ *
+ * @param { ArticleList } params
  * @returns
  */
 export const getGlobalFeedArticle = params => {

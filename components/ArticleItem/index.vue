@@ -37,6 +37,10 @@ export default {
     article: {
       type: Object,
       default: () => ({})
+    },
+    isSelf: {
+      type: Boolean,
+      default: false
     }
   },
   created() {
@@ -97,7 +101,8 @@ export default {
       this.$router.push({
         path: '/article',
         query: {
-          slug: article.slug
+          slug: article.slug,
+          isSelf: this.isSelf
         }
       })
     }

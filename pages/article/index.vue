@@ -12,18 +12,30 @@
               <span class="date">{{ articleDetail.updateAt | date('MMM DD,YYYY') }}</span>
             </div>
           </div>
-
-          <button class="btn btn-sm btn-outline-secondary" @click="followOrCancelFollowCurAuthor">
-            <i class="ion-plus-round"></i>
-            &nbsp;
-            {{ articleDetail.author && articleDetail.author.following ? 'UnFollow' : 'Follow' }}
-            {{ articleDetail.author ? articleDetail.author.username : '' }}
-          </button>
-          &nbsp;&nbsp;
-          <button class="btn btn-sm btn-outline-primary" @click="favoOrCancelFavoCurArticle">
-            <i class="ion-heart"></i>
-            &nbsp; Favorite Post <span class="counter">({{ articleDetail.favoritesCount }})</span>
-          </button>
+          <template v-if="isSelf">
+            <button class="btn btn-sm btn-outline-secondary" @click="jumpToEdit">
+              <i class="ion-edit"></i>
+              &nbsp; Edit Article
+            </button>
+            &nbsp;&nbsp;
+            <button class="btn btn-sm btn-outline-danger" @click="handleDeleteArticle">
+              <i class="ion-trash-a"></i>
+              &nbsp; Delete Article
+            </button>
+          </template>
+          <template v-else>
+            <button class="btn btn-sm btn-outline-secondary" @click="followOrCancelFollowCurAuthor">
+              <i class="ion-plus-round"></i>
+              &nbsp;
+              {{ articleDetail.author && articleDetail.author.following ? 'UnFollow' : 'Follow' }}
+              {{ articleDetail.author ? articleDetail.author.username : '' }}
+            </button>
+            &nbsp;&nbsp;
+            <button class="btn btn-sm btn-outline-primary" @click="favoOrCancelFavoCurArticle">
+              <i class="ion-heart"></i>
+              &nbsp; Favorite Post <span class="counter">({{ articleDetail.favoritesCount }})</span>
+            </button>
+          </template>
         </div>
       </div>
     </div>
@@ -57,17 +69,30 @@
               <span class="date">{{ articleDetail.updateAt | date('MMM DD, YYYY') }}</span>
             </div>
           </div>
-          <button class="btn btn-sm btn-outline-secondary" @click="followOrCancelFollowCurAuthor">
-            <i class="ion-plus-round"></i>
-            &nbsp;
-            {{ articleDetail.author && articleDetail.author.following ? 'UnFollow' : 'Follow' }}
-            {{ articleDetail.author ? articleDetail.author.username : '' }}
-          </button>
-          &nbsp;
-          <button class="btn btn-sm btn-outline-primary" @click="favoOrCancelFavoCurArticle">
-            <i class="ion-heart"></i>
-            &nbsp; Favorite Post <span class="counter">({{ articleDetail.favoritesCount }})</span>
-          </button>
+          <template v-if="isSelf">
+            <button class="btn btn-sm btn-outline-secondary" @click="jumpToEdit">
+              <i class="ion-edit"></i>
+              &nbsp; Edit Article
+            </button>
+            &nbsp;&nbsp;
+            <button class="btn btn-sm btn-outline-danger" @click="handleDeleteArticle">
+              <i class="ion-trash-a"></i>
+              &nbsp; Delete Article
+            </button>
+          </template>
+          <template v-else>
+            <button class="btn btn-sm btn-outline-secondary" @click="followOrCancelFollowCurAuthor">
+              <i class="ion-plus-round"></i>
+              &nbsp;
+              {{ articleDetail.author && articleDetail.author.following ? 'UnFollow' : 'Follow' }}
+              {{ articleDetail.author ? articleDetail.author.username : '' }}
+            </button>
+            &nbsp;&nbsp;
+            <button class="btn btn-sm btn-outline-primary" @click="favoOrCancelFavoCurArticle">
+              <i class="ion-heart"></i>
+              &nbsp; Favorite Post <span class="counter">({{ articleDetail.favoritesCount }})</span>
+            </button>
+          </template>
         </div>
       </div>
 
@@ -75,7 +100,12 @@
         <div class="col-xs-12 col-md-8 offset-md-2">
           <form class="card comment-form">
             <div class="card-block">
-              <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
+              <textarea
+                class="form-control"
+                placeholder="Write a comment..."
+                rows="3"
+                v-model="commentContent"
+              ></textarea>
             </div>
             <div class="card-footer">
               <img :src="user.image" class="comment-author-img" />
@@ -113,7 +143,8 @@ import {
   getArticleDetail,
   getCommentList,
   favoriteArticle,
-  cancelFavoriteArticle
+  cancelFavoriteArticle,
+  deleteArticle
 } from '../../apis/article'
 import { followProfile, cancelFollowProfile } from '../../apis/profile'
 import { mapState } from 'vuex'
@@ -123,11 +154,14 @@ export default {
     return {
       slug: '',
       articleDetail: {},
-      commentList: {}
+      commentList: {},
+      commentContent: '',
+      isSelf: false
     }
   },
   async created() {
     this.slug = this.$route.query.slug
+    this.isSelf = this.$route.query.isSelf
     await this.getArticleDetail()
     await this.getArticleCommentList()
     this.$set(this.articleDetail, 'disabledFollow', false)
@@ -164,6 +198,29 @@ export default {
           username: this.articleDetail.author.username
         }
       })
+    },
+
+    jumpToEdit() {
+      this.$router.push({
+        path: '/edit',
+        query: {
+          slug: this.slug
+        }
+      })
+    },
+
+    async handleDeleteArticle() {
+      try {
+        await deleteArticle(this.slug)
+        this.$router.push({
+          path: '/profile',
+          query: {
+            username: this.user.username
+          }
+        })
+      } catch (error) {
+        console.error(error)
+      }
     },
 
     async followOrCancelFollowCurAuthor() {

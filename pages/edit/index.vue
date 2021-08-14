@@ -51,7 +51,7 @@
               <button
                 class="btn btn-lg pull-xs-right btn-primary"
                 type="button"
-                @click="createNewArticle"
+                @click="createOrUpdateArticle"
               >
                 Publish Article
               </button>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { newArticle } from '../../apis/article'
+import { newArticle, getArticleDetail, updateArticle } from '../../apis/article'
 export default {
   name: 'edit',
   data() {
@@ -75,23 +75,43 @@ export default {
         tagList: [],
         title: '',
         tag: ''
-      }
+      },
+      slug: ''
+    }
+  },
+
+  async created() {
+    this.slug = this.$route.query.slug
+    if (this.slug) {
+      await this.getArticleDetail()
     }
   },
   methods: {
-    async createNewArticle() {
+    async createOrUpdateArticle() {
       const params = Object.assign(this.article)
       delete params.tag
       try {
-        await newArticle(params)
+        if (this.slug) {
+          await updateArticle(this.slug, params)
+        } else {
+          await newArticle(params)
+        }
         this.$router.push('/')
       } catch (error) {
         console.error(error)
       }
     },
+
     AddTagToTagList() {
       this.article.tagList.push(this.article.tag)
       this.article.tag = ''
+    },
+
+    async getArticleDetail() {
+      try {
+        const { article } = await getArticleDetail(this.slug)
+        this.article = Object.assign(this.article, article)
+      } catch (error) {}
     }
   }
 }

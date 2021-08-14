@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { getArticleDetail } from '../../apis/article'
 export default {
   name: 'ArticleEdit',
   data() {
@@ -45,9 +46,18 @@ export default {
       slug: ''
     }
   },
-  created() {
+  async created() {
     this.slug = this.$route.query.slug
+    await this.getArticleDetail()
     console.log(this.slug)
+  },
+  methods: {
+    async getArticleDetail() {
+      try {
+        const articleDetail = await getArticleDetail(this.slug)
+        console.log(articleDetail)
+      } catch (error) {}
+    }
   }
 }
 </script>

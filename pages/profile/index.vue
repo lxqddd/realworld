@@ -10,6 +10,15 @@
               {{ profileUserInfo.bio }}
             </p>
             <button
+              v-if="isSelf"
+              class="btn btn-sm btn-outline-secondary action-btn"
+              @click="jumpToEdit"
+            >
+              <i class="ion-gear-a"></i>
+              &nbsp; Edit Profile Settings
+            </button>
+            <button
+              v-else
               class="btn btn-sm btn-outline-secondary action-btn"
               @click="handleOrCancelFollow(profileUserInfo)"
               :disabled="profileUserInfo.disabledFollow"
@@ -41,7 +50,7 @@
           </div>
 
           <div class="article-preview" v-for="article in articles" :key="article.slug">
-            <ArticleItem :article="article" />
+            <ArticleItem :article="article" :isSelf="curSelectTab === 'My Articles'" />
           </div>
         </div>
         <Pagination
@@ -66,6 +75,7 @@ import {
 } from '../../apis/profile'
 import Pagination from '../../components/Pagination'
 import ArticleItem from '../../components/ArticleItem'
+import { mapState } from 'vuex'
 export default {
   name: 'UserProfile',
   middleware: 'authenticated',
@@ -95,6 +105,13 @@ export default {
     this.$set(this.profileUserInfo, 'disabledFollow', false)
   },
 
+  computed: {
+    ...mapState(['user']),
+    isSelf() {
+      return this.user.username === this.profileUserInfo.username
+    }
+  },
+
   methods: {
     async getProfileUserInfo() {
       try {
@@ -103,6 +120,12 @@ export default {
       } catch (error) {
         console.error(error)
       }
+    },
+
+    jumpToEdit() {
+      this.$router.push({
+        path: '/settings'
+      })
     },
 
     async handleOrCancelFollow(userInfo) {

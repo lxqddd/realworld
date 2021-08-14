@@ -25,7 +25,15 @@
             </nuxt-link>
           </li>
           <li class="nav-item" v-if="user.username">
-            <nuxt-link class="nav-link active" to="/profile">
+            <nuxt-link
+              class="nav-link active"
+              :to="{
+                path: '/profile',
+                query: {
+                  username: user.username
+                }
+              }"
+            >
               <img class="user-pic" :src="user.image" />
               {{ user.username }}
             </nuxt-link>
