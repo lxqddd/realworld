@@ -11,7 +11,7 @@ module.exports = {
           {
             name: 'home',
             path: '',
-            component: resolve(__dirname, 'pageS/home')
+            component: resolve(__dirname, 'pages/home')
           },
           {
             name: 'login',

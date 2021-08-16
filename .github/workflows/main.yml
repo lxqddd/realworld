@@ -1,4 +1,4 @@
-name: Publish And Deploy Demo
+name: Publish And Deploy nuxtjs-realworld
 on:
   push:
     tags:
