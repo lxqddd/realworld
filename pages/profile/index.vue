@@ -197,7 +197,6 @@ export default {
 
     async setPage(page) {
       this.curPage = page
-      console.log(this.curPage)
       await this.initArticlesOfTab(this.curSelectTab, this.profileUserInfo.username, this.curPage)
     },
 

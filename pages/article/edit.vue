@@ -49,13 +49,11 @@ export default {
   async created() {
     this.slug = this.$route.query.slug
     await this.getArticleDetail()
-    console.log(this.slug)
   },
   methods: {
     async getArticleDetail() {
       try {
         const articleDetail = await getArticleDetail(this.slug)
-        console.log(articleDetail)
       } catch (error) {}
     }
   }

@@ -175,7 +175,6 @@ export default {
       try {
         const res = await getArticleDetail(this.slug)
         this.articleDetail = res.article
-        console.log(this.articleDetail)
       } catch (error) {
         console.error(error)
       }
@@ -185,7 +184,6 @@ export default {
       try {
         const res = await getCommentList(this.slug)
         this.commentList = res.comments
-        console.log(this.commentList)
       } catch (error) {
         console.error(error)
       }

@@ -105,9 +105,7 @@ export default {
 
     handleErrors(errors) {
       for (const key in errors) {
-        errors[key].forEach(item => {
-          this.errors.push(key + ' ' + item)
-        })
+        this.errors.push(key + ' ' + errors[key])
       }
     },
 
