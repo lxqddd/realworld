@@ -93,7 +93,7 @@ export default {
       curSelectTab: 'My Articles',
       articles: [],
       articlesCount: 0,
-      curPage: 1,
+      curPage: 0,
       pageSize: 10,
       totalPages: 0
     }
@@ -202,11 +202,11 @@ export default {
 
     async setOffset(offset) {
       this.pageSize = offset
-      this.curPage = 1
+      this.curPage = 0
       await this.initArticlesOfTab(
         this.curSelectTab,
         this.profileUserInfo.username,
-        this.curPage - 1,
+        this.curPage,
         this.pageSize
       )
     }

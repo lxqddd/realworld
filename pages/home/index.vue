@@ -14,8 +14,8 @@
             <ul class="nav nav-pills outline-active">
               <li
                 class="nav-item"
-                v-for="item in tabMap"
-                :key="item ? item : 'hello'"
+                v-for="(item, index) in tabMap"
+                :key="item ? item : 'hello' + index"
                 @click="changeTab(item)"
               >
                 <span class="nav-link" :class="curSelectTab === item && 'active'" v-if="item">{{
@@ -85,7 +85,7 @@ export default {
       curSelectTab: 'Global Feed',
       curPage: 1,
       pageSize: 10,
-      totalPages: 0,
+      totalPages: 1,
 
       articlesCount: 0,
       articles: []
@@ -95,6 +95,11 @@ export default {
   created() {
     this.getTagList()
     this.getGlobalFeedArticleList()
+    if (!this.isLogin) {
+      this.tabMap.your = ''
+    } else {
+      this.tabMap.your = 'Your Feed'
+    }
   },
 
   computed: {
@@ -119,6 +124,7 @@ export default {
       }
       this.curSelectTab = tab
       if (tab === 'Your Feed' || tab === 'Global Feed') this.tabMap.dynamic = ''
+      this.curPage = 0
       await this.initArticlesOfTab(tab)
     },
 
@@ -128,18 +134,18 @@ export default {
       }
       this.tabMap.dynamic = tag
       this.curSelectTab = tag
-      await this.getTagArticle(1, this.pageSize, tag)
+      await this.getTagArticle(0, this.pageSize, tag)
     },
 
     async setPage(page) {
       this.curPage = page
-      await this.initArticlesOfTab(this.curSelectTab, this.curPage - 1)
+      await this.initArticlesOfTab(this.curSelectTab, this.curPage)
     },
 
     async setOffset(offset) {
       this.pageSize = offset
-      this.curPage = 1
-      await this.initArticlesOfTab(this.curSelectTab, this.curPage - 1, this.pageSize)
+      this.curPage = 0
+      await this.initArticlesOfTab(this.curSelectTab, this.curPage, this.pageSize)
     },
 
     async getYourFeedArticle(curPage, pageSize) {
